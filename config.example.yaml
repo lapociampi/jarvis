@@ -1,0 +1,52 @@
+# J.A.R.V.I.S. Configuration Example
+# Copy to ~/.jarvis/config.yaml and customize
+
+daemon:
+  port: 7777
+  data_dir: "~/.jarvis"
+  db_path: "~/.jarvis/jarvis.db"
+
+llm:
+  # Primary provider to use
+  primary: "anthropic"
+
+  # Fallback providers (tried in order if primary fails)
+  fallback:
+    - "openai"
+    - "ollama"
+
+  # Anthropic (Claude) configuration
+  anthropic:
+    api_key: "sk-ant-..."
+    model: "claude-sonnet-4-5-20250929"
+
+  # OpenAI (GPT) configuration
+  openai:
+    api_key: "sk-..."
+    model: "gpt-4o"
+
+  # Ollama (local models) configuration
+  ollama:
+    base_url: "http://localhost:11434"
+    model: "llama3"
+
+personality:
+  core_traits:
+    - "loyal"
+    - "efficient"
+    - "proactive"
+    - "respectful"
+    - "adaptive"
+
+authority:
+  # Default authority level (0-5)
+  # 0: No permission (ask for everything)
+  # 1: Read-only operations
+  # 2: Safe modifications
+  # 3: Standard operations (default)
+  # 4: System changes
+  # 5: Full control
+  default_level: 3
+
+# Active role configuration file
+active_role: "default"

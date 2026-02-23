@@ -1,0 +1,25 @@
+{
+  "name": "jarvis",
+  "version": "0.1.0",
+  "module": "src/daemon/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun run src/daemon/index.ts",
+    "dev": "bun --hot run src/daemon/index.ts",
+    "test": "bun test",
+    "db:init": "bun run src/vault/schema.ts",
+    "setup": "bun run scripts/setup-config.ts",
+    "test:llm": "bun run src/llm/test.ts",
+    "examples": "bun run examples/llm-integration.ts"
+  },
+  "dependencies": {
+    "yaml": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

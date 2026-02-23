@@ -1,0 +1,157 @@
+import { test, expect, describe } from 'bun:test';
+import { AnthropicProvider } from './anthropic.ts';
+import { OpenAIProvider } from './openai.ts';
+import { OllamaProvider } from './ollama.ts';
+import { LLMManager } from './manager.ts';
+import type { LLMMessage } from './provider.ts';
+
+describe('LLM Provider Types', () => {
+  test('AnthropicProvider can be instantiated', () => {
+    const provider = new AnthropicProvider('test-key', 'test-model');
+    expect(provider.name).toBe('anthropic');
+  });
+
+  test('OpenAIProvider can be instantiated', () => {
+    const provider = new OpenAIProvider('test-key', 'test-model');
+    expect(provider.name).toBe('openai');
+  });
+
+  test('OllamaProvider can be instantiated', () => {
+    const provider = new OllamaProvider('http://localhost:11434', 'llama3');
+    expect(provider.name).toBe('ollama');
+  });
+});
+
+describe('LLMManager', () => {
+  test('can register providers', () => {
+    const manager = new LLMManager();
+    const anthropic = new AnthropicProvider('test-key');
+
+    manager.registerProvider(anthropic);
+    expect(manager.getProvider('anthropic')).toBe(anthropic);
+  });
+
+  test('sets first registered provider as primary', () => {
+    const manager = new LLMManager();
+    const anthropic = new AnthropicProvider('test-key');
+
+    manager.registerProvider(anthropic);
+    // Primary is set automatically
+    expect(manager.getProvider('anthropic')).toBeDefined();
+  });
+
+  test('can change primary provider', () => {
+    const manager = new LLMManager();
+    const anthropic = new AnthropicProvider('test-key-1');
+    const openai = new OpenAIProvider('test-key-2');
+
+    manager.registerProvider(anthropic);
+    manager.registerProvider(openai);
+    manager.setPrimary('openai');
+
+    // Should not throw
+    expect(manager.getProvider('openai')).toBeDefined();
+  });
+
+  test('throws when setting non-existent provider as primary', () => {
+    const manager = new LLMManager();
+    expect(() => manager.setPrimary('nonexistent')).toThrow();
+  });
+
+  test('can set fallback chain', () => {
+    const manager = new LLMManager();
+    const anthropic = new AnthropicProvider('test-key-1');
+    const openai = new OpenAIProvider('test-key-2');
+
+    manager.registerProvider(anthropic);
+    manager.registerProvider(openai);
+    manager.setPrimary('anthropic');
+    manager.setFallbackChain(['openai']);
+
+    // Should not throw
+    expect(manager.getProvider('anthropic')).toBeDefined();
+    expect(manager.getProvider('openai')).toBeDefined();
+  });
+
+  test('throws when setting non-existent fallback provider', () => {
+    const manager = new LLMManager();
+    const anthropic = new AnthropicProvider('test-key');
+
+    manager.registerProvider(anthropic);
+    expect(() => manager.setFallbackChain(['nonexistent'])).toThrow();
+  });
+});
+
+describe('Message Types', () => {
+  test('LLMMessage has correct structure', () => {
+    const message: LLMMessage = {
+      role: 'user',
+      content: 'Hello',
+    };
+
+    expect(message.role).toBe('user');
+    expect(message.content).toBe('Hello');
+  });
+
+  test('supports all message roles', () => {
+    const messages: LLMMessage[] = [
+      { role: 'system', content: 'You are helpful' },
+      { role: 'user', content: 'Hello' },
+      { role: 'assistant', content: 'Hi there' },
+    ];
+
+    expect(messages).toHaveLength(3);
+    expect(messages[0].role).toBe('system');
+    expect(messages[1].role).toBe('user');
+    expect(messages[2].role).toBe('assistant');
+  });
+});
+
+describe('Provider URLs', () => {
+  test('AnthropicProvider uses correct API URL', () => {
+    const provider = new AnthropicProvider('test-key') as any;
+    expect(provider.apiUrl).toBe('https://api.anthropic.com/v1/messages');
+  });
+
+  test('OpenAIProvider uses correct API URL', () => {
+    const provider = new OpenAIProvider('test-key') as any;
+    expect(provider.apiUrl).toBe('https://api.openai.com/v1/chat/completions');
+  });
+
+  test('OllamaProvider uses correct base URL', () => {
+    const provider = new OllamaProvider() as any;
+    expect(provider.baseUrl).toBe('http://localhost:11434');
+  });
+
+  test('OllamaProvider removes trailing slash from base URL', () => {
+    const provider = new OllamaProvider('http://localhost:11434/') as any;
+    expect(provider.baseUrl).toBe('http://localhost:11434');
+  });
+});
+
+describe('Default Models', () => {
+  test('AnthropicProvider has correct default model', () => {
+    const provider = new AnthropicProvider('test-key') as any;
+    expect(provider.defaultModel).toBe('claude-sonnet-4-5-20250929');
+  });
+
+  test('OpenAIProvider has correct default model', () => {
+    const provider = new OpenAIProvider('test-key') as any;
+    expect(provider.defaultModel).toBe('gpt-4o');
+  });
+
+  test('OllamaProvider has correct default model', () => {
+    const provider = new OllamaProvider() as any;
+    expect(provider.defaultModel).toBe('llama3');
+  });
+
+  test('can override default models', () => {
+    const anthropic = new AnthropicProvider('key', 'custom-model') as any;
+    const openai = new OpenAIProvider('key', 'custom-model') as any;
+    const ollama = new OllamaProvider('http://localhost:11434', 'custom-model') as any;
+
+    expect(anthropic.defaultModel).toBe('custom-model');
+    expect(openai.defaultModel).toBe('custom-model');
+    expect(ollama.defaultModel).toBe('custom-model');
+  });
+});
