@@ -281,6 +281,14 @@ export class WorkflowEngine implements Service {
       variables,
       logger,
       abortSignal: abortController.signal,
+      nodeRegistry: this.nodeRegistry,
+      broadcast: (type, data) => this.emit({
+        type: type as any,
+        workflowId,
+        executionId,
+        data,
+        timestamp: Date.now(),
+      }),
     };
 
     // Refresh template context

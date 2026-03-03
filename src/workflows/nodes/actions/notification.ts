@@ -42,9 +42,22 @@ export const notificationAction: NodeDefinition = {
     const body = String(config.body ?? '');
     const urgency = String(config.urgency ?? 'normal');
 
-    ctx.logger.info(`Sending desktop notification: [${urgency}] ${title}`);
+    ctx.logger.info(`Sending notification: [${urgency}] ${title}`);
 
-    // Try notify-send on Linux/WSLg, fall back to logging
+    // Broadcast to dashboard via WebSocket
+    if (ctx.broadcast) {
+      ctx.broadcast('workflow_message', {
+        channel: 'notification',
+        message: body ? `**${title}**: ${body}` : title,
+        title,
+        body,
+        urgency,
+        executionId: ctx.executionId,
+        workflowId: ctx.workflowId,
+      });
+    }
+
+    // Also try notify-send on Linux/WSLg for desktop notification
     let sent = false;
     try {
       const urgencyFlag = urgency === 'high' ? 'critical' : urgency === 'low' ? 'low' : 'normal';
@@ -55,7 +68,7 @@ export const notificationAction: NodeDefinition = {
       await proc.exited;
       sent = proc.exitCode === 0;
     } catch {
-      ctx.logger.warn('notify-send not available — notification logged only');
+      // notify-send not available — dashboard broadcast is the primary channel
     }
 
     return {

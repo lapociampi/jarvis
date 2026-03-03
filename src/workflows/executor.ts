@@ -177,7 +177,8 @@ async function selfHeal(
     if (!nodeDef) return null;
 
     return await nodeDef.execute(input, parsed.correctedConfig, ctx);
-  } catch {
+  } catch (parseErr) {
+    ctx.logger.warn(`Self-heal parse/execution failed: ${parseErr instanceof Error ? parseErr.message : parseErr}`);
     return null;
   }
 }

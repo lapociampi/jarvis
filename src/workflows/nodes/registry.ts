@@ -35,6 +35,8 @@ export type ExecutionContext = {
   logger: StepLogger;
   abortSignal: AbortSignal;
   nodeRegistry?: NodeRegistry;  // For self-heal: re-execute with corrected config
+  /** Broadcast a message to dashboard chat (used by send_message, notification nodes) */
+  broadcast?: (type: string, data: Record<string, unknown>) => void;
 };
 
 export interface VariableScopeInterface {

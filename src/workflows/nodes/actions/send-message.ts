@@ -35,25 +35,38 @@ export const sendMessageAction: NodeDefinition = {
     const message = String(config.message ?? '');
     ctx.logger.info(`Sending message to ${channel}: ${message.slice(0, 100)}`);
 
-    // Route to appropriate channel via tool registry if available
-    const toolName = channel === 'dashboard'
-      ? 'send_dashboard_notification'
-      : channel === 'telegram'
+    let success = false;
+
+    if (channel === 'dashboard') {
+      // Broadcast directly to connected dashboard clients via WebSocket
+      if (ctx.broadcast) {
+        ctx.broadcast('workflow_message', {
+          channel: 'dashboard',
+          message,
+          executionId: ctx.executionId,
+          workflowId: ctx.workflowId,
+        });
+        success = true;
+      } else {
+        ctx.logger.warn('No broadcast function available — message logged only');
+      }
+    } else {
+      // Route to Telegram/Discord via tool registry
+      const toolName = channel === 'telegram'
         ? 'send_telegram_message'
         : 'send_discord_message';
 
-    let success = false;
-    try {
-      if (ctx.toolRegistry.has(toolName)) {
-        await ctx.toolRegistry.execute(toolName, { message });
-        success = true;
-      } else {
-        ctx.logger.warn(`Tool '${toolName}' not available — message logged only`);
-        success = true; // logged is still a success
+      try {
+        if (ctx.toolRegistry.has(toolName)) {
+          await ctx.toolRegistry.execute(toolName, { message });
+          success = true;
+        } else {
+          ctx.logger.warn(`Tool '${toolName}' not available — message logged only`);
+        }
+      } catch (err) {
+        ctx.logger.error(`Failed to send message: ${err instanceof Error ? err.message : String(err)}`);
+        throw err;
       }
-    } catch (err) {
-      ctx.logger.error(`Failed to send message: ${err instanceof Error ? err.message : String(err)}`);
-      throw err;
     }
 
     return {

@@ -315,6 +315,23 @@ export function useWebSocket() {
       streamIdRef.current = null;
       toolCallsRef.current = [];
       subAgentEventsRef.current = [];
+    } else if (msg.type === "workflow_event") {
+      const wfEvent = msg.payload as WorkflowEvent;
+      setWorkflowEvents((prev) => [...prev.slice(-100), wfEvent]);
+
+      // If it's a workflow_message, show it in the chat
+      if (wfEvent.type === "workflow_message" && wfEvent.data?.message) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: crypto.randomUUID(),
+            role: "system" as MessageRole,
+            content: String(wfEvent.data.message),
+            timestamp: wfEvent.timestamp,
+            source: "workflow",
+          },
+        ]);
+      }
     } else if (msg.type === "notification") {
       const payload = msg.payload as { source?: string; action?: string; task?: TaskEvent["task"] };
       if (payload.source === "task_update" && payload.task && payload.action) {
@@ -331,8 +348,6 @@ export function useWebSocket() {
           timestamp: msg.timestamp,
         };
         setContentEvents((prev) => [...prev, event]);
-      } else if (msg.type === "workflow_event") {
-        setWorkflowEvents((prev) => [...prev.slice(-100), msg.payload as WorkflowEvent]);
       } else if (payload.source === "awareness_event") {
         // Awareness events (context changes, suggestions, etc.)
         const awarenessEvent = payload.event as { type: string; data: Record<string, unknown> };
