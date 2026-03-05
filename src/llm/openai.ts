@@ -185,13 +185,13 @@ export class OpenAIProvider implements LLMProvider {
               const choice = chunk.choices[0];
               responseModel = chunk.model;
 
-              if (choice.delta.content) {
-                accumulatedText += choice.delta.content;
-                yield { type: 'text', text: choice.delta.content };
+              if (choice!.delta.content) {
+                accumulatedText += choice!.delta.content;
+                yield { type: 'text', text: choice!.delta.content };
               }
 
-              if (choice.delta.tool_calls) {
-                for (const toolCallDelta of choice.delta.tool_calls) {
+              if (choice!.delta.tool_calls) {
+                for (const toolCallDelta of choice!.delta.tool_calls) {
                   const index = toolCallDelta.index;
                   let builder = toolCallBuilders.get(index);
 
@@ -212,8 +212,8 @@ export class OpenAIProvider implements LLMProvider {
                 }
               }
 
-              if (choice.finish_reason) {
-                finishReason = choice.finish_reason;
+              if (choice!.finish_reason) {
+                finishReason = choice!.finish_reason;
               }
             }
           } catch (err) {
@@ -285,8 +285,8 @@ export class OpenAIProvider implements LLMProvider {
 
   private convertMessages(messages: LLMMessage[]): OpenAIMessage[] {
     return messages.map(m => ({
-      role: m.role,
-      content: m.content,
+      role: m.role as 'system' | 'user' | 'assistant',
+      content: m.content as string,
     }));
   }
 
@@ -302,7 +302,7 @@ export class OpenAIProvider implements LLMProvider {
   }
 
   private convertResponse(response: OpenAIResponse): LLMResponse {
-    const choice = response.choices[0];
+    const choice = response.choices[0]!;
     const message = choice.message;
     const content = message.content || '';
     const tool_calls: LLMToolCall[] = [];
@@ -329,7 +329,7 @@ export class OpenAIProvider implements LLMProvider {
         output_tokens: response.usage.completion_tokens,
       },
       model: response.model,
-      finish_reason: this.mapFinishReason(choice.finish_reason),
+      finish_reason: this.mapFinishReason(choice!.finish_reason),
     };
   }
 

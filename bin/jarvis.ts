@@ -13,8 +13,7 @@
  */
 
 import { join } from 'node:path';
-import { readFileSync } from 'node:fs';
-import { existsSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { writePid, clearPid, isRunning, getLogPath } from '../src/daemon/pid.ts';
 import { c } from '../src/cli/helpers.ts';
 
@@ -112,13 +111,12 @@ async function cmdStart(args: string[]): Promise<void> {
 
     const logPath = getLogPath();
     const logFile = Bun.file(logPath);
-    const logWriter = logFile.writer();
 
     const daemonArgs = [join(PACKAGE_ROOT, 'bin/jarvis.ts'), 'start', '--foreground', '--no-open'];
     if (port) daemonArgs.push('--port', String(port));
 
     const child = Bun.spawn(['bun', ...daemonArgs], {
-      stdio: ['ignore', logWriter, logWriter],
+      stdio: ['ignore', logFile, logFile],
       env: { ...process.env },
     });
 

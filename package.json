@@ -10,6 +10,20 @@
   "engines": {
     "bun": ">=1.0.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jarvis-ai/daemon.git"
+  },
+  "license": "MIT",
+  "keywords": ["jarvis", "ai", "daemon", "assistant", "cli"],
+  "files": [
+    "bin/",
+    "src/",
+    "ui/dist/",
+    "ui/public/",
+    "scripts/ensure-bun.js",
+    "README.md"
+  ],
   "scripts": {
     "start": "bun run src/daemon/index.ts",
     "dev": "bun --hot run src/daemon/index.ts",
@@ -22,7 +36,7 @@
     "test:llm": "bun run src/llm/test.ts",
     "examples": "bun run examples/llm-integration.ts",
     "setup:google": "bun run src/scripts/google-setup.ts",
-    "postinstall": "bun run copy:models 2>/dev/null || true",
+    "postinstall": "node scripts/ensure-bun.js && bun run copy:models 2>/dev/null || true",
     "prepare": "git config core.hooksPath .githooks 2>/dev/null || true",
     "prepublishOnly": "bun run copy:models && bun run build:ui"
   },

@@ -1592,7 +1592,7 @@ export function createApiRoutes(ctx: ApiContext): Record<string, unknown> {
           const id = parts[parts.length - 2];
           let triggerData: Record<string, unknown> = {};
           try { triggerData = await req.json() as any; } catch {}
-          const execution = await ctx.workflowEngine.execute(id, 'manual', triggerData);
+          const execution = await ctx.workflowEngine.execute(id!, 'manual', triggerData);
           return json(execution, 201);
         } catch (err) { return error(`${err}`); }
       },
@@ -1681,7 +1681,7 @@ export function createApiRoutes(ctx: ApiContext): Record<string, unknown> {
           const url = new URL(req.url);
           const parts = url.pathname.split('/');
           const executionId = parts[parts.length - 2];
-          await ctx.workflowEngine.cancel(executionId);
+          await ctx.workflowEngine.cancel(executionId!);
           return json({ ok: true });
         } catch (err) { return error(`${err}`); }
       },
@@ -1720,7 +1720,7 @@ export function createApiRoutes(ctx: ApiContext): Record<string, unknown> {
           const id = url.pathname.split('/').pop() === 'dismiss'
             ? url.pathname.split('/').slice(-2, -1)[0]
             : url.pathname.split('/').pop()!;
-          ctx.autoSuggest.dismiss(id);
+          ctx.autoSuggest.dismiss(id!);
           return json({ ok: true });
         } catch (err) { return error(`${err}`); }
       },

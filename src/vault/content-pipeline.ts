@@ -133,7 +133,7 @@ export function findContent(query: {
   const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
   const rows = db.prepare(
     `SELECT * FROM content_items ${where} ORDER BY sort_order ASC, updated_at DESC`
-  ).all(...params) as ContentRow[];
+  ).all(...params as any[]) as ContentRow[];
 
   return rows.map(parseRow);
 }
@@ -167,7 +167,7 @@ export function updateContent(id: string, updates: {
   if (updates.sort_order !== undefined) { sets.push('sort_order = ?'); params.push(updates.sort_order); }
 
   params.push(id);
-  db.prepare(`UPDATE content_items SET ${sets.join(', ')} WHERE id = ?`).run(...params);
+  db.prepare(`UPDATE content_items SET ${sets.join(', ')} WHERE id = ?`).run(...params as any[]);
 
   return getContent(id);
 }

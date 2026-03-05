@@ -223,7 +223,7 @@ export function updateSession(id: string, updates: Partial<{
   if (setClauses.length === 0) return;
 
   params.push(id);
-  db.prepare(`UPDATE awareness_sessions SET ${setClauses.join(', ')} WHERE id = ?`).run(...params);
+  db.prepare(`UPDATE awareness_sessions SET ${setClauses.join(', ')} WHERE id = ?`).run(...params as any[]);
 }
 
 export function endSession(id: string, summary?: string): void {

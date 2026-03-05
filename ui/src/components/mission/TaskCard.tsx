@@ -139,7 +139,7 @@ export function TaskCard({ task, kanban, justUpdated, onMove, onStatusChange }: 
               flexShrink: 0,
             }}
           >
-            {assigneeLabel[0].toUpperCase()}
+            {assigneeLabel[0]!.toUpperCase()}
           </span>
           <span
             style={{

@@ -184,7 +184,7 @@ describe('CronScheduler — schedule() / cancel()', () => {
 
     const jobs = scheduler.getJobs();
     expect(jobs).toHaveLength(1);
-    expect(jobs[0].id).toBe('job2');
+    expect(jobs[0]!.id).toBe('job2');
   });
 
   test('cancelAll() removes all jobs', () => {
@@ -203,7 +203,7 @@ describe('CronScheduler — schedule() / cancel()', () => {
 
     const jobs = scheduler.getJobs();
     expect(jobs).toHaveLength(1);
-    expect(jobs[0].expression).toBe('0 * * * *');
+    expect(jobs[0]!.expression).toBe('0 * * * *');
   });
 
   test('invalid expression throws', () => {
@@ -213,7 +213,7 @@ describe('CronScheduler — schedule() / cancel()', () => {
   test('job info has nextRun set', () => {
     scheduler.schedule('timed', '0 12 * * *', () => {});
     const jobs = scheduler.getJobs();
-    expect(jobs[0].nextRun).toBeGreaterThan(Date.now() - 1000);
+    expect(jobs[0]!.nextRun).toBeGreaterThan(Date.now() - 1000);
   });
 });
 
@@ -683,7 +683,7 @@ describe('TriggerManager', () => {
 
     const jobs = manager.getCronScheduler().getJobs();
     expect(jobs).toHaveLength(1);
-    expect(jobs[0].expression).toBe('0 * * * *');
+    expect(jobs[0]!.expression).toBe('0 * * * *');
 
     manager.getCronScheduler().cancelAll();
   });

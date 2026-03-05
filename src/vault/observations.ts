@@ -109,7 +109,7 @@ export function getRecentObservations(
   params.push(limit);
 
   const stmt = db.prepare(query);
-  const rows = stmt.all(...params) as ObservationRow[];
+  const rows = stmt.all(...params as any[]) as ObservationRow[];
 
   return rows.map(parseObservation);
 }

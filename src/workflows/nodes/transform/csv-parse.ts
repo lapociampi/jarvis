@@ -48,11 +48,11 @@ export const csvParseTransform: NodeDefinition = {
       return { data: { ...input.data, csv_rows: [], csv_headers: [] } };
     }
 
-    const headers = lines[0].split(delimiter).map(h => h.trim().replace(/^"|"$/g, ''));
+    const headers = lines[0]!.split(delimiter).map(h => h.trim().replace(/^"|"$/g, ''));
     const rows: Record<string, string>[] = [];
 
     for (let i = 1; i < lines.length; i++) {
-      const values = lines[i].split(delimiter).map(v => v.trim().replace(/^"|"$/g, ''));
+      const values = lines[i]!.split(delimiter).map(v => v.trim().replace(/^"|"$/g, ''));
       const row: Record<string, string> = {};
       headers.forEach((h, idx) => { row[h] = values[idx] ?? ''; });
       rows.push(row);

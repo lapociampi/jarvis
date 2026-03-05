@@ -105,7 +105,7 @@ export function findFacts(query: {
 
   const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
   const stmt = db.prepare(`SELECT * FROM facts ${where} ORDER BY created_at DESC`);
-  const rows = stmt.all(...params) as FactRow[];
+  const rows = stmt.all(...params as any[]) as FactRow[];
 
   return rows.map(parseFact);
 }
@@ -120,9 +120,9 @@ export function queryFact(subjectName: string, predicate: string): Fact | null {
   if (entities.length === 0) return null;
 
   // Use the first matching entity
-  const facts = findFacts({ subject_id: entities[0].id, predicate });
+  const facts = findFacts({ subject_id: entities[0]!.id, predicate });
 
-  return facts.length > 0 ? facts[0] : null;
+  return facts.length > 0 ? facts[0]! : null;
 }
 
 /**
@@ -164,7 +164,7 @@ export function updateFact(
   params.push(id);
 
   const stmt = db.prepare(`UPDATE facts SET ${fields.join(', ')} WHERE id = ?`);
-  stmt.run(...params);
+  stmt.run(...params as any[]);
 
   return getFact(id);
 }

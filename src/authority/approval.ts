@@ -177,7 +177,7 @@ export class ApprovalManager {
 
     return db.query(
       `SELECT * FROM approval_requests ${where} ORDER BY created_at DESC LIMIT ?`
-    ).all(...values, limit) as ApprovalRequest[];
+    ).all(...[...values, limit] as any[]) as ApprovalRequest[];
   }
 
   /**

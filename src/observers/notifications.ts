@@ -104,7 +104,7 @@ export class NotificationListener implements Observer {
   private async readOutput(): Promise<void> {
     if (!this.process?.stdout) return;
 
-    const reader = this.process.stdout.getReader();
+    const reader = (this.process.stdout as ReadableStream<Uint8Array>).getReader();
     const decoder = new TextDecoder();
     let buffer = '';
 
@@ -164,7 +164,7 @@ export class NotificationListener implements Observer {
           // Parse urgency from hints dict (byte value)
           const urgencyMatch = trimmed.match(/byte\s+(\d+)/);
           if (urgencyMatch) {
-            const urgencyLevel = parseInt(urgencyMatch[1]);
+            const urgencyLevel = parseInt(urgencyMatch[1]!);
             currentNotification.urgency =
               urgencyLevel === 2 ? 'critical' :
               urgencyLevel === 1 ? 'normal' :

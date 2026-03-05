@@ -28,9 +28,9 @@ export function resolveExpression(expr: string, ctx: TemplateContext): unknown {
   const nodeMatch = trimmed.match(/^\$node\["([^"]+)"\]\.(.+)$/);
   if (nodeMatch) {
     const [, nodeName, path] = nodeMatch;
-    const nodeData = ctx.nodeOutputs.get(nodeName);
+    const nodeData = ctx.nodeOutputs.get(nodeName!);
     if (!nodeData) return undefined;
-    return resolvePath(nodeData, path);
+    return resolvePath(nodeData, path!);
   }
 
   // $trigger.field
@@ -57,7 +57,7 @@ export function resolveTemplateString(template: string, ctx: TemplateContext): u
   // If entire string is a single expression, return raw value
   const singleMatch = template.match(/^\{\{(.+?)\}\}$/);
   if (singleMatch) {
-    return resolveExpression(singleMatch[1], ctx);
+    return resolveExpression(singleMatch[1]!, ctx);
   }
 
   // Otherwise interpolate all expressions as strings

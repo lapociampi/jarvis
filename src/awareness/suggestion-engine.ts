@@ -146,7 +146,7 @@ export class SuggestionEngine {
     return {
       id: '',
       type: 'struggle',
-      title: titleMap[appCategory] ?? titleMap.general,
+      title: titleMap[appCategory] ?? titleMap.general!,
       body,
       triggerCaptureId: context.captureId,
       context: {
@@ -167,7 +167,7 @@ export class SuggestionEngine {
     minutes: number,
     signals: Array<{ name: string; score: number; detail: string }>
   ): string {
-    const topSignal = signals.sort((a, b) => b.score - a.score)[0];
+    const topSignal = signals.sort((a, b) => b.score - a.score)[0]!;
 
     const messages: Record<string, string> = {
       code_editor: `I've been watching you edit this code for ${minutes}+ minutes and it looks like you might be stuck. Let me analyze your code for issues...`,
@@ -178,7 +178,7 @@ export class SuggestionEngine {
       general: `You've been working on this for ${minutes}+ minutes with a lot of back-and-forth. Want me to help figure out what's blocking you?`,
     };
 
-    return messages[appCategory] ?? messages.general;
+    return messages[appCategory] ?? messages.general!;
   }
 
   /**
@@ -224,8 +224,8 @@ export class SuggestionEngine {
     // Count app-pair transitions
     const transitions = new Map<string, number>();
     for (let i = 1; i < this.actionHistory.length; i++) {
-      const from = this.actionHistory[i - 1].appName;
-      const to = this.actionHistory[i].appName;
+      const from = this.actionHistory[i - 1]!.appName;
+      const to = this.actionHistory[i]!.appName;
       if (from !== to) {
         const key = `${from}→${to}`;
         transitions.set(key, (transitions.get(key) ?? 0) + 1);

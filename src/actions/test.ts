@@ -47,8 +47,8 @@ async function testActionLayer() {
   console.log(`   Chrome DevTools available: ${isAvailable}`);
   if (isAvailable) {
     try {
-      await browserSession.ensureConnected();
-      const browser = browserSession.getBrowser();
+      await (browserSession as any).ensureConnected();
+      const browser = (browserSession as any).getBrowser();
       const tabs = await browser.listTabs();
       console.log(`   ✓ Found ${tabs.length} browser tab(s)`);
       await browserSession.disconnect();

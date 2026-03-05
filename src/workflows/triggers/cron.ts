@@ -44,19 +44,19 @@ function parseField(field: string, min: number, max: number): number[] {
     // Step: */n or start/n
     if (trimmed.includes('/')) {
       const [rangeStr, stepStr] = trimmed.split('/');
-      const step = parseInt(stepStr, 10);
+      const step = parseInt(stepStr!, 10);
       if (isNaN(step) || step <= 0) throw new Error(`Invalid step in cron field: "${trimmed}"`);
 
       let rangeMin = min;
       let rangeMax = max;
 
       if (rangeStr !== '*') {
-        if (rangeStr.includes('-')) {
-          const [a, b] = rangeStr.split('-').map(s => parseInt(s, 10));
-          rangeMin = a;
-          rangeMax = b;
+        if (rangeStr!.includes('-')) {
+          const [a, b] = rangeStr!.split('-').map(s => parseInt(s, 10));
+          rangeMin = a!;
+          rangeMax = b!;
         } else {
-          rangeMin = parseInt(rangeStr, 10);
+          rangeMin = parseInt(rangeStr!, 10);
         }
       }
 
@@ -67,8 +67,8 @@ function parseField(field: string, min: number, max: number): number[] {
     // Range: a-b
     if (trimmed.includes('-')) {
       const [a, b] = trimmed.split('-').map(s => parseInt(s, 10));
-      if (isNaN(a) || isNaN(b)) throw new Error(`Invalid range in cron field: "${trimmed}"`);
-      for (let i = a; i <= b; i++) values.add(i);
+      if (isNaN(a!) || isNaN(b!)) throw new Error(`Invalid range in cron field: "${trimmed}"`);
+      for (let i = a!; i <= b!; i += 1) values.add(i);
       continue;
     }
 
@@ -99,11 +99,11 @@ function parseExpression(expression: string): {
   const [minField, hourField, domField, monthField, dowField] = parts;
 
   return {
-    minutes: parseField(minField, 0, 59),
-    hours: parseField(hourField, 0, 23),
-    daysOfMonth: parseField(domField, 1, 31),
-    months: parseField(monthField, 1, 12),
-    daysOfWeek: parseField(dowField, 0, 6),  // 0 = Sunday
+    minutes: parseField(minField!, 0, 59),
+    hours: parseField(hourField!, 0, 23),
+    daysOfMonth: parseField(domField!, 1, 31),
+    months: parseField(monthField!, 1, 12),
+    daysOfWeek: parseField(dowField!, 0, 6),  // 0 = Sunday
   };
 }
 

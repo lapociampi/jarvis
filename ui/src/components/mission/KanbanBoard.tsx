@@ -11,6 +11,7 @@ type Commitment = {
   priority: string;
   status: string;
   assigned_to: string | null;
+  created_from: string | null;
   created_at: number;
   completed_at: number | null;
   result: string | null;
@@ -57,7 +58,7 @@ export function KanbanBoard({ refreshKey, taskEvents }: Props) {
     const newEvents = taskEvents.filter((e) => e.timestamp > lastProcessedRef.current);
     if (newEvents.length === 0) return;
 
-    lastProcessedRef.current = newEvents[newEvents.length - 1].timestamp;
+    lastProcessedRef.current = newEvents[newEvents.length - 1]!.timestamp;
 
     setLocalTasks((prev) => {
       let updated = [...prev];
@@ -109,9 +110,9 @@ export function KanbanBoard({ refreshKey, taskEvents }: Props) {
     }
     for (const t of localTasks) {
       if (map[t.status]) {
-        map[t.status].push(t);
+        map[t.status]!.push(t);
       } else {
-        map["pending"].push(t);
+        map["pending"]!.push(t);
       }
     }
     return map;

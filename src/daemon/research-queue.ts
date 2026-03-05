@@ -140,7 +140,7 @@ export class ResearchQueue {
       .sort((a, b) => a.created_at - b.created_at);
 
     if (completed.length > 0) {
-      this.topics.delete(completed[0].id);
+      this.topics.delete(completed[0]!.id);
       return;
     }
 
@@ -149,7 +149,7 @@ export class ResearchQueue {
       .sort((a, b) => a.created_at - b.created_at);
 
     if (low.length > 0) {
-      this.topics.delete(low[0].id);
+      this.topics.delete(low[0]!.id);
     }
   }
 }

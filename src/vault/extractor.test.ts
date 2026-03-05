@@ -52,9 +52,9 @@ describe('Vault Extractor', () => {
       const result = parseExtractionResponse(response);
 
       expect(result.entities).toHaveLength(1);
-      expect(result.entities[0].name).toBe('Anna');
+      expect(result.entities[0]!.name).toBe('Anna');
       expect(result.facts).toHaveLength(1);
-      expect(result.facts[0].predicate).toBe('birthday_is');
+      expect(result.facts[0]!.predicate).toBe('birthday_is');
     });
 
     test('should handle markdown code blocks', () => {
@@ -70,7 +70,7 @@ describe('Vault Extractor', () => {
       const result = parseExtractionResponse(response);
 
       expect(result.entities).toHaveLength(1);
-      expect(result.entities[0].name).toBe('Bob');
+      expect(result.entities[0]!.name).toBe('Bob');
     });
 
     test('should return empty result on invalid JSON', () => {
@@ -188,8 +188,8 @@ describe('Vault Extractor', () => {
       // Verify fact was stored
       const facts = findFacts({});
       expect(facts).toHaveLength(1);
-      expect(facts[0].predicate).toBe('email_is');
-      expect(facts[0].object).toBe('bob@example.com');
+      expect(facts[0]!.predicate).toBe('email_is');
+      expect(facts[0]!.object).toBe('bob@example.com');
     });
 
     test('should extract and store relationships', async () => {
@@ -231,7 +231,7 @@ describe('Vault Extractor', () => {
       // Verify relationship was stored
       const relationships = findRelationships({});
       expect(relationships).toHaveLength(1);
-      expect(relationships[0].type).toBe('manages');
+      expect(relationships[0]!.type).toBe('manages');
     });
 
     test('should extract and store commitments', async () => {
@@ -274,9 +274,9 @@ describe('Vault Extractor', () => {
       // Verify commitment was stored
       const commitments = findCommitments({});
       expect(commitments).toHaveLength(1);
-      expect(commitments[0].what).toBe('Remind about meeting');
-      expect(commitments[0].priority).toBe('high');
-      expect(commitments[0].when_due).toBeTruthy();
+      expect(commitments[0]!.what).toBe('Remind about meeting');
+      expect(commitments[0]!.priority).toBe('high');
+      expect(commitments[0]!.when_due).toBeTruthy();
     });
 
     test('should reuse existing entities', async () => {

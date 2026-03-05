@@ -112,7 +112,7 @@ export function findEntities(query: {
 
   const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
   const stmt = db.prepare(`SELECT * FROM entities ${where} ORDER BY updated_at DESC`);
-  const rows = stmt.all(...params) as EntityRow[];
+  const rows = stmt.all(...params as any[]) as EntityRow[];
 
   return rows.map(parseEntity);
 }
@@ -154,7 +154,7 @@ export function updateEntity(
   params.push(id);
 
   const stmt = db.prepare(`UPDATE entities SET ${fields.join(', ')} WHERE id = ?`);
-  stmt.run(...params);
+  stmt.run(...params as any[]);
 
   return getEntity(id);
 }

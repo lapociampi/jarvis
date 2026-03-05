@@ -34,7 +34,7 @@ test('WebSocketServer - health endpoint', async () => {
   const response = await fetch('http://localhost:3143/health');
   expect(response.ok).toBe(true);
 
-  const data = await response.json();
+  const data = await response.json() as any;
   expect(data.status).toBe('ok');
   expect(data.clients).toBe(0);
   expect(typeof data.uptime).toBe('number');
@@ -128,7 +128,7 @@ test('WebSocketServer - broadcast', async () => {
     });
 
     ws.onmessage = (event) => {
-      messages[i].push(JSON.parse(event.data));
+      messages[i]!.push(JSON.parse(event.data));
     };
   }
 
@@ -146,10 +146,10 @@ test('WebSocketServer - broadcast', async () => {
   // Wait for messages to arrive
   await new Promise((resolve) => setTimeout(resolve, 100));
 
-  expect(messages[0].length).toBe(1);
-  expect(messages[1].length).toBe(1);
-  expect(messages[0][0].payload).toEqual({ text: 'Broadcast to all' });
-  expect(messages[1][0].payload).toEqual({ text: 'Broadcast to all' });
+  expect(messages[0]!.length).toBe(1);
+  expect(messages[1]!.length).toBe(1);
+  expect(messages[0]![0]!.payload).toEqual({ text: 'Broadcast to all' });
+  expect(messages[1]![0]!.payload).toEqual({ text: 'Broadcast to all' });
 
   clients.forEach((ws) => ws.close());
   server.stop();
@@ -269,8 +269,8 @@ test('WebSocketServer - sendToClient unicasts JSON', async () => {
   await new Promise((resolve) => setTimeout(resolve, 200));
 
   expect(received.length).toBe(1);
-  expect(received[0].type).toBe('tts_start');
-  expect((received[0].payload as any).requestId).toBe('test-123');
+  expect(received[0]!.type).toBe('tts_start');
+  expect((received[0]!.payload as any).requestId).toBe('test-123');
 
   ws.close();
   server.stop();

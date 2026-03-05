@@ -236,8 +236,8 @@ export class OllamaProvider implements LLMProvider {
 
   private convertMessages(messages: LLMMessage[]): OllamaMessage[] {
     return messages.map(m => ({
-      role: m.role,
-      content: m.content,
+      role: m.role as 'system' | 'user' | 'assistant',
+      content: m.content as string,
     }));
   }
 

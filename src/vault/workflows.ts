@@ -125,7 +125,7 @@ export function findWorkflows(query?: {
   const limitVal = query?.limit ? Math.max(1, Math.min(parseInt(String(query.limit), 10) || 100, 1000)) : null;
   const limitClause = limitVal ? 'LIMIT ?' : '';
   if (limitVal) params.push(limitVal);
-  const rows = getDb().prepare(`SELECT * FROM workflows ${where} ORDER BY updated_at DESC ${limitClause}`).all(...params) as WorkflowRow[];
+  const rows = getDb().prepare(`SELECT * FROM workflows ${where} ORDER BY updated_at DESC ${limitClause}`).all(...params as any[]) as WorkflowRow[];
 
   let result = rows.map(parseWorkflow);
   if (query?.tag) {
@@ -160,7 +160,7 @@ export function updateWorkflow(
   if (updates.last_failure_at !== undefined) { sets.push('last_failure_at = ?'); params.push(updates.last_failure_at); }
 
   params.push(id);
-  db.prepare(`UPDATE workflows SET ${sets.join(', ')} WHERE id = ?`).run(...params);
+  db.prepare(`UPDATE workflows SET ${sets.join(', ')} WHERE id = ?`).run(...params as any[]);
   return getWorkflow(id);
 }
 
@@ -270,7 +270,7 @@ export function updateExecution(
   if (sets.length === 0) return getExecution(id);
 
   params.push(id);
-  db.prepare(`UPDATE workflow_executions SET ${sets.join(', ')} WHERE id = ?`).run(...params);
+  db.prepare(`UPDATE workflow_executions SET ${sets.join(', ')} WHERE id = ?`).run(...params as any[]);
 
   // Update workflow success/failure timestamps
   if (updates.status === 'completed' || updates.status === 'failed') {
@@ -298,7 +298,7 @@ export function findExecutions(query: {
   const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
   const limitVal = Math.max(1, Math.min(parseInt(String(query.limit ?? 100), 10) || 100, 1000));
   params.push(limitVal);
-  const rows = getDb().prepare(`SELECT * FROM workflow_executions ${where} ORDER BY started_at DESC LIMIT ?`).all(...params) as ExecutionRow[];
+  const rows = getDb().prepare(`SELECT * FROM workflow_executions ${where} ORDER BY started_at DESC LIMIT ?`).all(...params as any[]) as ExecutionRow[];
   return rows.map(parseExecution);
 }
 
@@ -344,7 +344,7 @@ export function updateStepResult(
   if (sets.length === 0) return null;
 
   params.push(id);
-  db.prepare(`UPDATE workflow_step_results SET ${sets.join(', ')} WHERE id = ?`).run(...params);
+  db.prepare(`UPDATE workflow_step_results SET ${sets.join(', ')} WHERE id = ?`).run(...params as any[]);
 
   const row = db.prepare('SELECT * FROM workflow_step_results WHERE id = ?').get(id) as StepRow | null;
   return row ? parseStep(row) : null;

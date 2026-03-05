@@ -44,13 +44,13 @@ export function TrendsPanel() {
   const { data: insights } = useApiData<BehavioralInsight[]>(insightsPath, []);
 
   const prevWeek = () => {
-    const d = new Date(weekStart);
+    const d = new Date(weekStart!);
     d.setDate(d.getDate() - 7);
     setWeekStart(d.toISOString().split("T")[0]);
   };
 
   const nextWeek = () => {
-    const d = new Date(weekStart);
+    const d = new Date(weekStart!);
     d.setDate(d.getDate() + 7);
     setWeekStart(d.toISOString().split("T")[0]);
   };

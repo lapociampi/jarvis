@@ -53,7 +53,7 @@ export function PipelineStageNotes({ contentId, currentStage, notes, onNoteAdded
   const grouped: Record<string, StageNote[]> = {};
   for (const n of notes) {
     if (!grouped[n.stage]) grouped[n.stage] = [];
-    grouped[n.stage].push(n);
+    grouped[n.stage]!.push(n);
   }
 
   const stages = Object.keys(grouped);
@@ -121,7 +121,7 @@ export function PipelineStageNotes({ contentId, currentStage, notes, onNoteAdded
           }}>
             {stage}
           </div>
-          {grouped[stage].map((note) => (
+          {grouped[stage]!.map((note) => (
             <div key={note.id} style={{
               padding: "8px 10px",
               marginBottom: "4px",

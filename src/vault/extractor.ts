@@ -180,7 +180,7 @@ export async function extractAndStore(
 
       if (existing.length > 0) {
         // Use existing entity ID
-        entityMap.set(name, existing[0].id);
+        entityMap.set(name, existing[0]!.id);
       } else {
         // Create new entity
         const entity = createEntity(
@@ -277,7 +277,7 @@ export function extractGoalCompletion(goal: {
     let entityId: string;
 
     if (existing.length > 0) {
-      entityId = existing[0].id;
+      entityId = existing[0]!.id;
     } else {
       const entity = createEntity('concept', goal.title, {
         goal_id: goal.id,

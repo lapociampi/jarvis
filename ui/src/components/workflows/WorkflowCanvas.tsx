@@ -73,8 +73,8 @@ export default function WorkflowCanvas({
   workflowEvents: WorkflowEvent[];
   sendMessage: (text: string) => void;
 }) {
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [rightTab, setRightTab] = useState<"properties" | "executions" | "versions" | "chat">("properties");
   const [showPalette, setShowPalette] = useState(true);
@@ -96,7 +96,7 @@ export default function WorkflowCanvas({
   // Load workflow definition from latest version
   useEffect(() => {
     if (!latestVersion || latestVersion.length === 0) return;
-    const version = latestVersion[0]; // newest first
+    const version = latestVersion[0]!;
     const def = version.definition;
 
     const flowNodes: Node[] = def.nodes.map(n => {

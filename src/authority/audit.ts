@@ -110,7 +110,7 @@ export class AuditTrail {
 
     return db.query(
       `SELECT * FROM audit_trail ${where} ORDER BY created_at DESC LIMIT ?`
-    ).all(...values, limit) as AuditEntry[];
+    ).all(...[...values, limit] as any[]) as AuditEntry[];
   }
 
   /**

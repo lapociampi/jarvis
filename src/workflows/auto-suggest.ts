@@ -117,8 +117,8 @@ export class WorkflowAutoSuggest {
     // Look for repeated A→B→A switches (copy-paste patterns)
     const switchPairs: Map<string, number> = new Map();
     for (let i = 1; i < appSwitchEvents.length; i++) {
-      const from = String(appSwitchEvents[i - 1].data.appName ?? '');
-      const to = String(appSwitchEvents[i].data.appName ?? '');
+      const from = String(appSwitchEvents[i - 1]!.data.appName ?? '');
+      const to = String(appSwitchEvents[i]!.data.appName ?? '');
       if (from && to && from !== to) {
         const key = `${from}→${to}`;
         switchPairs.set(key, (switchPairs.get(key) ?? 0) + 1);

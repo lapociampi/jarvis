@@ -44,7 +44,7 @@ test('retrieveForMessage finds entities by name', () => {
 
   const profiles = retrieveForMessage('Tell me about John');
   expect(profiles.length).toBe(1);
-  expect(profiles[0].entity.name).toBe('John');
+  expect(profiles[0]!.entity.name).toBe('John');
 });
 
 test('retrieveForMessage finds entities via fact objects', () => {
@@ -65,7 +65,7 @@ test('retrieveForMessage includes facts for matched entities', () => {
 
   const profiles = retrieveForMessage('Tell me about John');
   expect(profiles.length).toBe(1);
-  expect(profiles[0].facts.length).toBe(2);
+  expect(profiles[0]!.facts.length).toBe(2);
 });
 
 test('retrieveForMessage includes relationships', () => {

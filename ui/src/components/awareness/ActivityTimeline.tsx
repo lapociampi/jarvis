@@ -52,7 +52,7 @@ export function ActivityTimeline() {
         {captures.map((c, i) => {
           const time = new Date(c.timestamp);
           const isExpanded = expandedId === c.id;
-          const showAppChange = i > 0 && captures[i].app_name !== captures[i - 1].app_name;
+          const showAppChange = i > 0 && captures[i]!.app_name !== captures[i - 1]!.app_name;
 
           return (
             <React.Fragment key={c.id}>

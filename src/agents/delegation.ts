@@ -1,7 +1,7 @@
 import type { AgentInstance } from './agent.ts';
 import type { Commitment } from '../vault/commitments.ts';
 import { createCommitment } from '../vault/commitments.ts';
-import { sendMessage } from './messaging.ts';
+import { sendMessage, type MessagePriority } from './messaging.ts';
 
 export type DelegationResult = {
   success: boolean;
@@ -54,7 +54,7 @@ export function delegateTask(
 
   // Send a task message to the child
   const message = sendMessage(parent.id, child.id, 'task', task.what, {
-    priority: task.priority ?? 'normal',
+    priority: (task.priority === 'critical' ? 'urgent' : task.priority ?? 'normal') as MessagePriority,
     requires_response: true,
     deadline: task.deadline,
   });

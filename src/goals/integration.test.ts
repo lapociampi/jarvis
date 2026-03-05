@@ -48,8 +48,8 @@ test('matchAwarenessToGoals finds matches for active goals', () => {
   });
 
   expect(matches.length).toBeGreaterThanOrEqual(1);
-  expect(matches[0].goalTitle).toBe('Learn TypeScript fundamentals');
-  expect(matches[0].matchedTerms.length).toBeGreaterThanOrEqual(2);
+  expect(matches[0]!.goalTitle).toBe('Learn TypeScript fundamentals');
+  expect(matches[0]!.matchedTerms.length).toBeGreaterThanOrEqual(2);
 });
 
 test('matchAwarenessToGoals does not match unrelated events', () => {
@@ -94,7 +94,7 @@ test('matchAwarenessToGoals handles session_ended data', () => {
   });
 
   expect(matches.length).toBeGreaterThanOrEqual(1);
-  expect(matches[0].matchedTerms.length).toBeGreaterThanOrEqual(2);
+  expect(matches[0]!.matchedTerms.length).toBeGreaterThanOrEqual(2);
 });
 
 test('logAutoDetectedProgress creates progress entries', () => {
@@ -250,10 +250,10 @@ test('extractGoalCompletion creates entity with facts', () => {
   // Verify entity was created
   const entities = findEntities({ name: 'Build REST API', type: 'concept' });
   expect(entities.length).toBe(1);
-  expect(entities[0].source).toBe('goal_completion');
+  expect(entities[0]!.source).toBe('goal_completion');
 
   // Verify facts were stored
-  const facts = findFacts({ subject_id: entities[0].id });
+  const facts = findFacts({ subject_id: entities[0]!.id });
   const factMap = new Map(facts.map(f => [f.predicate, f.object]));
 
   expect(factMap.get('goal_final_score')).toBe('0.85');
@@ -283,7 +283,7 @@ test('extractGoalCompletion handles failed goals', () => {
   const entities = findEntities({ name: 'Learn Rust', type: 'concept' });
   expect(entities.length).toBe(1);
 
-  const facts = findFacts({ subject_id: entities[0].id });
+  const facts = findFacts({ subject_id: entities[0]!.id });
   const factMap = new Map(facts.map(f => [f.predicate, f.object]));
   expect(factMap.get('goal_outcome')).toBe('failed');
   expect(factMap.get('goal_final_score')).toBe('0.20');

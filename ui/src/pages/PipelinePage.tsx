@@ -38,7 +38,7 @@ export default function PipelinePage({ contentEvents, sendMessage }: Props) {
     const newEvents = contentEvents.filter((e) => e.timestamp > lastProcessedRef.current);
     if (newEvents.length === 0) return;
 
-    lastProcessedRef.current = newEvents[newEvents.length - 1].timestamp;
+    lastProcessedRef.current = newEvents[newEvents.length - 1]!.timestamp;
 
     setLocalItems((prev) => {
       let updated = [...prev];

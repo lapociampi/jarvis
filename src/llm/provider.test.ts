@@ -102,9 +102,9 @@ describe('Message Types', () => {
     ];
 
     expect(messages).toHaveLength(3);
-    expect(messages[0].role).toBe('system');
-    expect(messages[1].role).toBe('user');
-    expect(messages[2].role).toBe('assistant');
+    expect(messages[0]!.role).toBe('system');
+    expect(messages[1]!.role).toBe('user');
+    expect(messages[2]!.role).toBe('assistant');
   });
 });
 

@@ -280,14 +280,14 @@ export class AnthropicProvider implements LLMProvider {
     while (i < nonSystem.length) {
       const msg = nonSystem[i];
 
-      if (msg.role === 'assistant' && msg.tool_calls && msg.tool_calls.length > 0) {
+      if (msg!.role === 'assistant' && msg!.tool_calls && msg!.tool_calls.length > 0) {
         // Assistant message with tool use → content blocks
         const content: Array<{ type: string; [key: string]: unknown }> = [];
-        if (msg.content) {
-          const textContent = typeof msg.content === 'string' ? msg.content : msg.content.filter(b => b.type === 'text').map(b => (b as { text: string }).text).join('\n');
+        if (msg!.content) {
+          const textContent = typeof msg!.content === 'string' ? msg!.content : msg!.content.filter(b => b.type === 'text').map(b => (b as { text: string }).text).join('\n');
           if (textContent) content.push({ type: 'text', text: textContent });
         }
-        for (const tc of msg.tool_calls) {
+        for (const tc of msg!.tool_calls!) {
           content.push({
             type: 'tool_use',
             id: tc.id,
@@ -300,8 +300,8 @@ export class AnthropicProvider implements LLMProvider {
 
         // Collect subsequent tool result messages into a single user message
         const toolResults: Array<{ type: string; [key: string]: unknown }> = [];
-        while (i < nonSystem.length && nonSystem[i].role === 'tool') {
-          const toolMsg = nonSystem[i];
+        while (i < nonSystem.length && nonSystem[i]!.role === 'tool') {
+          const toolMsg = nonSystem[i]!;
           // ContentBlock[] → pass as structured content (supports images)
           // string → pass as-is (backward-compatible)
           toolResults.push({
@@ -314,19 +314,19 @@ export class AnthropicProvider implements LLMProvider {
         if (toolResults.length > 0) {
           anthropicMessages.push({ role: 'user', content: toolResults });
         }
-      } else if (msg.role === 'tool') {
+      } else if (msg!.role === 'tool') {
         // Standalone tool result (shouldn't happen but handle gracefully)
         anthropicMessages.push({
           role: 'user',
-          content: [{ type: 'tool_result', tool_use_id: msg.tool_call_id, content: msg.content }],
+          content: [{ type: 'tool_result', tool_use_id: msg!.tool_call_id, content: msg!.content }],
         });
         i++;
       } else {
         // Regular user or assistant message
         // ContentBlock[] passes through (supports images in user messages)
         anthropicMessages.push({
-          role: msg.role as 'user' | 'assistant',
-          content: msg.content as string | Array<{ type: string; [key: string]: unknown }>,
+          role: msg!.role as 'user' | 'assistant',
+          content: msg!.content as string | Array<{ type: string; [key: string]: unknown }>,
         });
         i++;
       }

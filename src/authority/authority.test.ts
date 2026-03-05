@@ -370,7 +370,7 @@ describe('ApprovalManager', () => {
 
     const pending = mgr.getPending();
     expect(pending.length).toBe(1);
-    expect(pending[0].tool_name).toBe('send_email');
+    expect(pending[0]!.tool_name).toBe('send_email');
   });
 
   test('findByShortId works', () => {
@@ -450,7 +450,7 @@ describe('AuditTrail', () => {
 
     const browserOnly = trail.query({ action: 'access_browser' });
     expect(browserOnly.length).toBe(1);
-    expect(browserOnly[0].tool_name).toBe('browser_navigate');
+    expect(browserOnly[0]!.tool_name).toBe('browser_navigate');
   });
 
   test('getStats aggregates correctly', () => {
@@ -492,8 +492,8 @@ describe('AuthorityLearner', () => {
 
     const suggestions = learner.getSuggestions();
     expect(suggestions.length).toBe(1);
-    expect(suggestions[0].actionCategory).toBe('send_email');
-    expect(suggestions[0].consecutiveApprovals).toBe(3);
+    expect(suggestions[0]!.actionCategory).toBe('send_email');
+    expect(suggestions[0]!.consecutiveApprovals).toBe(3);
   });
 
   test('denial resets consecutive count', () => {

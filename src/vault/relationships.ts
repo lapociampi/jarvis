@@ -100,7 +100,7 @@ export function findRelationships(query: {
 
   const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
   const stmt = db.prepare(`SELECT * FROM relationships ${where} ORDER BY created_at DESC`);
-  const rows = stmt.all(...params) as RelationshipRow[];
+  const rows = stmt.all(...params as any[]) as RelationshipRow[];
 
   return rows.map(parseRelationship);
 }

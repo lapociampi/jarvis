@@ -171,9 +171,9 @@ export class ProcessMonitor implements Observer {
         continue;
       }
 
-      const pid = parseInt(parts[1], 10);
-      const cpu = parseFloat(parts[2]);
-      const memory = parseFloat(parts[3]);
+      const pid = parseInt(parts[1]!, 10);
+      const cpu = parseFloat(parts[2]!);
+      const memory = parseFloat(parts[3]!);
       const name = parts.slice(10).join(' '); // COMMAND can have spaces
 
       if (!isNaN(pid)) {
@@ -198,17 +198,17 @@ export class ProcessMonitor implements Observer {
 
     // Skip header line
     for (let i = 1; i < lines.length; i++) {
-      const line = lines[i];
+      const line = lines[i]!;
       const parts = line.split(',').map(p => p.replace(/"/g, '').trim());
 
       if (parts.length < 4) {
         continue;
       }
 
-      const pid = parseInt(parts[0], 10);
-      const name = parts[1];
-      const cpu = parseFloat(parts[2]) || 0;
-      const memory = parseFloat(parts[3]) || 0;
+      const pid = parseInt(parts[0]!, 10);
+      const name: string = parts[1]!;
+      const cpu = parseFloat(parts[2]!) || 0;
+      const memory = parseFloat(parts[3]!) || 0;
 
       if (!isNaN(pid)) {
         processes.push({

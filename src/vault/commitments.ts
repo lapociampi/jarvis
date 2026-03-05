@@ -155,7 +155,7 @@ export function findCommitments(query: {
 
   const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
   const stmt = db.prepare(`SELECT * FROM commitments ${where} ORDER BY sort_order ASC, created_at DESC`);
-  const rows = stmt.all(...params) as CommitmentRow[];
+  const rows = stmt.all(...params as any[]) as CommitmentRow[];
 
   return rows.map(parseCommitment);
 }

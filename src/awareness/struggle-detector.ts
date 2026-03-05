@@ -146,7 +146,7 @@ export class StruggleDetector {
     this.struggleStartedAt = null;
 
     const appCategory = this.classifyApp(appName, windowTitle, ocrText);
-    const durationMs = timestamp - this.snapshots[0].timestamp;
+    const durationMs = timestamp - this.snapshots[0]!.timestamp;
 
     return {
       isStruggling: true,
@@ -219,10 +219,10 @@ export class StruggleDetector {
     let revertCount = 0;
 
     for (let i = 2; i < this.snapshots.length; i++) {
-      const current = this.snapshots[i].ocrHash;
+      const current = this.snapshots[i]!.ocrHash;
       // Check if current matches any of the 2-5 snapshots before it
       for (let k = 2; k <= Math.min(5, i); k++) {
-        if (current === this.snapshots[i - k].ocrHash) {
+        if (current === this.snapshots[i - k]!.ocrHash) {
           revertCount++;
           break; // count each revert once
         }
@@ -287,8 +287,8 @@ export class StruggleDetector {
 
     for (let i = 1; i < this.snapshots.length; i++) {
       const dist = cheapEditDistance(
-        this.snapshots[i - 1].ocrText,
-        this.snapshots[i].ocrText
+        this.snapshots[i - 1]!.ocrText,
+        this.snapshots[i]!.ocrText
       );
       totalDist += dist;
       comparisons++;

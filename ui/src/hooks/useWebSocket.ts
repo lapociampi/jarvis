@@ -344,7 +344,7 @@ export function useWebSocket() {
         ]);
       }
     } else if (msg.type === "notification") {
-      const payload = msg.payload as { source?: string; action?: string; task?: TaskEvent["task"] };
+      const payload = msg.payload as { source?: string; action?: string; task?: TaskEvent["task"]; item?: ContentEvent["item"]; event?: any };
       if (payload.source === "task_update" && payload.task && payload.action) {
         const event: TaskEvent = {
           action: payload.action as TaskEvent["action"],

@@ -6,9 +6,9 @@ export { WindowsAppController } from './app-control/windows.ts';
 export { MacAppController } from './app-control/macos.ts';
 
 // Browser exports
-export { CDPBrowser } from './browser/cdp.ts';
-export type { BrowserTab } from './browser/cdp.ts';
-export { BrowserSession } from './browser/session.ts';
+export { CDPClient as CDPBrowser } from './browser/cdp.ts';
+export type { PageElement as BrowserTab } from './browser/session.ts';
+export { BrowserController as BrowserSession } from './browser/session.ts';
 
 // Terminal exports
 export { TerminalExecutor } from './terminal/executor.ts';

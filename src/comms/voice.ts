@@ -24,7 +24,7 @@ export class OpenAIWhisperSTT implements STTProvider {
 
   async transcribe(audio: Buffer): Promise<string> {
     const formData = new FormData();
-    formData.append('file', new Blob([audio], { type: 'audio/webm' }), 'audio.webm');
+    formData.append('file', new Blob([new Uint8Array(audio)], { type: 'audio/webm' }), 'audio.webm');
     formData.append('model', this.model);
     formData.append('language', 'en');
 
@@ -39,7 +39,7 @@ export class OpenAIWhisperSTT implements STTProvider {
       throw new Error(`OpenAI STT error (${response.status}): ${err}`);
     }
 
-    const result = await response.json();
+    const result = await response.json() as any;
     return result.text;
   }
 }
@@ -58,7 +58,7 @@ export class GroqWhisperSTT implements STTProvider {
 
   async transcribe(audio: Buffer): Promise<string> {
     const formData = new FormData();
-    formData.append('file', new Blob([audio], { type: 'audio/webm' }), 'audio.webm');
+    formData.append('file', new Blob([new Uint8Array(audio)], { type: 'audio/webm' }), 'audio.webm');
     formData.append('model', this.model);
     formData.append('language', 'en');
 
@@ -73,7 +73,7 @@ export class GroqWhisperSTT implements STTProvider {
       throw new Error(`Groq STT error (${response.status}): ${err}`);
     }
 
-    const result = await response.json();
+    const result = await response.json() as any;
     return result.text;
   }
 }
@@ -92,7 +92,7 @@ export class LocalWhisperSTT implements STTProvider {
 
   async transcribe(audio: Buffer): Promise<string> {
     const formData = new FormData();
-    formData.append('file', new Blob([audio], { type: 'audio/webm' }), 'audio.webm');
+    formData.append('file', new Blob([new Uint8Array(audio)], { type: 'audio/webm' }), 'audio.webm');
     formData.append('model', this.model);
     formData.append('language', 'en');
 
@@ -106,7 +106,7 @@ export class LocalWhisperSTT implements STTProvider {
       throw new Error(`Local Whisper STT error (${response.status}): ${err}`);
     }
 
-    const result = await response.json();
+    const result = await response.json() as any;
     return result.text;
   }
 }
@@ -250,7 +250,7 @@ export async function listElevenLabsVoices(apiKey: string): Promise<{
     throw new Error(`ElevenLabs voices error (${response.status}): ${err}`);
   }
 
-  const data = await response.json();
+  const data = await response.json() as any;
   return (data.voices ?? []).map((v: any) => ({
     voice_id: v.voice_id,
     name: v.name,

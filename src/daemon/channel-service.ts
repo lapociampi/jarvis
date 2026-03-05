@@ -180,7 +180,7 @@ export class ChannelService implements Service {
       const action = approveMatch ? 'approve' : 'deny';
       const shortId = (approveMatch ?? denyMatch)![1];
       try {
-        return await this.approvalHandler(action as 'approve' | 'deny', shortId, channelTag);
+        return await this.approvalHandler(action as 'approve' | 'deny', shortId!, channelTag);
       } catch (err) {
         return `Error processing approval: ${err instanceof Error ? err.message : String(err)}`;
       }

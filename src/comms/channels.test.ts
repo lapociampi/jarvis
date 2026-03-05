@@ -151,9 +151,9 @@ describe('Discord splitMessage', () => {
     const text = 'a'.repeat(5000);
     const result = splitMessage(text, 2000);
     expect(result.length).toBe(3); // 2000 + 2000 + 1000
-    expect(result[0].length).toBe(2000);
-    expect(result[1].length).toBe(2000);
-    expect(result[2].length).toBe(1000);
+    expect(result[0]!.length).toBe(2000);
+    expect(result[1]!.length).toBe(2000);
+    expect(result[2]!.length).toBe(1000);
   });
 
   test('handles empty string', () => {

@@ -233,17 +233,13 @@ export class DesktopController implements AppController {
   /**
    * Drag one element onto another.
    */
-  async dragElement(fromId: number, toId: number): Promise<string> {
+  async dragElement(fromId: UIElement | number, toId: UIElement | number): Promise<void> {
     await this.ensureConnected();
 
-    const from = this.elementCache.get(fromId);
-    const to = this.elementCache.get(toId);
-    if (!from) return `Error: Source element [${fromId}] not found.`;
-    if (!to) return `Error: Target element [${toId}] not found.`;
+    const fromNum = typeof fromId === 'number' ? fromId : parseInt(fromId.id, 10);
+    const toNum = typeof toId === 'number' ? toId : parseInt(toId.id, 10);
 
-    await this.send('dragElement', { fromId, toId });
-
-    return `Dragged [${from.role}] "${from.name}" onto [${to.role}] "${to.name}"`;
+    await this.send('dragElement', { fromId: fromNum, toId: toNum });
   }
 
   /**

@@ -2,6 +2,7 @@
  * Goal Vault — CRUD operations for M16 Autonomous Goal Pursuit
  */
 
+import type { SQLQueryBindings } from 'bun:sqlite';
 import { getDb, generateId } from './schema.ts';
 import type {
   Goal, GoalProgressEntry, GoalCheckIn,
@@ -139,7 +140,7 @@ export function findGoals(query: GoalQuery = {}): Goal[] {
 
   const rows = db.prepare(
     `SELECT * FROM goals ${where} ORDER BY sort_order ASC, created_at ASC LIMIT ?`
-  ).all(...params, limit) as GoalRow[];
+  ).all(...(params as SQLQueryBindings[]), limit) as GoalRow[];
 
   return rows.map(parseGoal);
 }
@@ -196,7 +197,7 @@ export function updateGoal(id: string, updates: GoalUpdate): Goal | null {
   params.push(Date.now());
   params.push(id);
 
-  db.prepare(`UPDATE goals SET ${sets.join(', ')} WHERE id = ?`).run(...params);
+  db.prepare(`UPDATE goals SET ${sets.join(', ')} WHERE id = ?`).run(...(params as SQLQueryBindings[]));
 
   return getGoal(id);
 }
@@ -242,7 +243,7 @@ export function updateGoalStatus(id: string, status: GoalStatus): Goal | null {
   }
 
   params.push(id);
-  db.prepare(`UPDATE goals SET ${sets.join(', ')} WHERE id = ?`).run(...params);
+  db.prepare(`UPDATE goals SET ${sets.join(', ')} WHERE id = ?`).run(...(params as SQLQueryBindings[]));
 
   return getGoal(id);
 }

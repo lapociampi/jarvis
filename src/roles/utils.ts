@@ -2,7 +2,8 @@
  * Utility functions for working with roles
  */
 
-import type { RoleDefinition, ActionCategory } from './types.ts';
+import type { RoleDefinition } from './types.ts';
+import type { ActionCategory } from './authority.ts';
 import { canPerform, listAllowedActions } from './authority.ts';
 
 /**
@@ -31,7 +32,7 @@ export function findMinimalRoleForAction(
   action: ActionCategory
 ): RoleDefinition | null {
   const capable = findRolesWithPermission(roles, action);
-  return capable.length > 0 ? capable[0] : null;
+  return capable.length > 0 ? capable[0]! : null;
 }
 
 /**

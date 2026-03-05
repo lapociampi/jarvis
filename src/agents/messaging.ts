@@ -113,7 +113,7 @@ export function getMessages(
     `SELECT * FROM agent_messages WHERE ${where} ORDER BY created_at DESC ${limitClause}`
   );
 
-  const rows = stmt.all(...params) as MessageRow[];
+  const rows = stmt.all(...params as string[]) as MessageRow[];
   return rows.map(parseMessage);
 }
 

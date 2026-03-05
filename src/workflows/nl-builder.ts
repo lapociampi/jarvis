@@ -149,7 +149,7 @@ Rules:
   private extractJson(text: string): string {
     // Try to extract from code block
     const codeBlock = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-    if (codeBlock) return codeBlock[1].trim();
+    if (codeBlock) return codeBlock[1]!.trim();
     // Try raw JSON
     const start = text.indexOf('{');
     const end = text.lastIndexOf('}');

@@ -66,16 +66,16 @@ function parseArgs(): Partial<DaemonConfig> {
     const arg = args[i];
     switch (arg) {
       case '--port':
-        config.port = parseInt(args[++i], 10);
+        config.port = parseInt(args[++i]!, 10);
         break;
       case '--db-path':
-        config.dbPath = args[++i];
+        config.dbPath = args[++i]!;
         break;
       case '--data-dir':
-        config.dataDir = args[++i];
+        config.dataDir = args[++i]!;
         break;
       case '--health-interval':
-        config.healthCheckInterval = parseInt(args[++i], 10);
+        config.healthCheckInterval = parseInt(args[++i]!, 10);
         break;
       case '--help':
       case '-h':
@@ -335,9 +335,9 @@ export async function startDaemon(userConfig?: Partial<DaemonConfig>): Promise<v
     const authorityConfig = jarvisConfig.authority ?? { default_level: 3 };
     const authorityEngine = new AuthorityEngine({
       default_level: authorityConfig.default_level,
-      governed_categories: authorityConfig.governed_categories ?? ['send_email', 'send_message', 'make_payment'],
-      overrides: authorityConfig.overrides ?? [],
-      context_rules: authorityConfig.context_rules ?? [],
+      governed_categories: (authorityConfig.governed_categories ?? ['send_email', 'send_message', 'make_payment']) as any,
+      overrides: (authorityConfig.overrides ?? []) as any,
+      context_rules: (authorityConfig.context_rules ?? []) as any,
       learning: authorityConfig.learning ?? { enabled: true, suggest_threshold: 5 },
       emergency_state: authorityConfig.emergency_state ?? 'normal',
     });
@@ -709,12 +709,12 @@ export async function startDaemon(userConfig?: Partial<DaemonConfig>): Promise<v
         }
 
         // Wire into API context
-        apiContext.workflowEngine = workflowEngine;
-        apiContext.triggerManager = triggerManager;
-        apiContext.webhookManager = triggerManager.getWebhookManager();
-        apiContext.nodeRegistry = nodeRegistry;
-        apiContext.nlBuilder = nlBuilder;
-        apiContext.autoSuggest = autoSuggest;
+        (apiContext as any).workflowEngine = workflowEngine;
+        (apiContext as any).triggerManager = triggerManager;
+        (apiContext as any).webhookManager = triggerManager.getWebhookManager();
+        (apiContext as any).nodeRegistry = nodeRegistry;
+        (apiContext as any).nlBuilder = nlBuilder;
+        (apiContext as any).autoSuggest = autoSuggest;
 
         console.log('[Daemon] Workflow engine started (engine + triggers + NL builder + auto-suggest)');
       } catch (err) {

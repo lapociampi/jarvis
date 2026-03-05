@@ -272,7 +272,7 @@ export class ContextTracker {
       const parts = windowTitle.split(/\s[-–—]\s/);
       if (parts.length >= 2) {
         // Last part is usually the app name
-        appName = parts[parts.length - 1].trim();
+        appName = parts[parts.length - 1]!.trim();
       } else {
         appName = windowTitle.trim();
       }

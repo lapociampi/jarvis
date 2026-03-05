@@ -16,6 +16,7 @@ node_modules/
 # Dev-only files
 examples/
 scripts/
+!scripts/ensure-bun.js
 VISION.md
 CLAUDE.md
 **/*.md

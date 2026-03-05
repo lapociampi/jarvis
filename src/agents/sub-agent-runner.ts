@@ -143,8 +143,8 @@ async function executeTool(
   }
 
   try {
-    let result = await registry.execute(toolCall.name, toolCall.arguments);
-    result = typeof result === 'string' ? result : JSON.stringify(result);
+    const raw = await registry.execute(toolCall.name, toolCall.arguments);
+    let result: string = typeof raw === 'string' ? raw : JSON.stringify(raw);
 
     if (result.length > MAX_TOOL_RESULT_CHARS) {
       result = result.slice(0, MAX_TOOL_RESULT_CHARS) + `\n... (truncated, was ${result.length} chars)`;

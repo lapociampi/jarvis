@@ -16,4 +16,4 @@ export type { AgentTreeNode } from './hierarchy.ts';
 
 // Main orchestrator
 export { AgentOrchestrator } from './orchestrator.ts';
-export type { LLMManager } from './orchestrator.ts';
+export type { LLMManager } from '../llm/manager.ts';

@@ -35,6 +35,9 @@ const testConfig: AwarenessConfig = {
   suggestion_rate_limit_ms: 100, // fast for tests
   retention: { full_hours: 1, key_moment_hours: 24 },
   capture_dir: '/tmp/jarvis-test-captures',
+  struggle_grace_ms: 120000,
+  struggle_cooldown_ms: 180000,
+  overlay_autolaunch: false,
 };
 
 describe('Vault — Screen Captures', () => {
@@ -78,7 +81,7 @@ describe('Vault — Screen Captures', () => {
 
     const range = getCapturesInRange(now - 40000, now - 10000);
     expect(range.length).toBe(1);
-    expect(range[0].app_name).toBe('B');
+    expect(range[0]!.app_name).toBe('B');
   });
 
   test('getAppUsageStats', () => {
@@ -92,9 +95,9 @@ describe('Vault — Screen Captures', () => {
 
     const stats = getAppUsageStats(now - 10000, now + 1000);
     expect(stats.length).toBe(2);
-    expect(stats[0].app).toBe('Chrome');
-    expect(stats[0].captureCount).toBe(5);
-    expect(stats[1].app).toBe('VS Code');
+    expect(stats[0]!.app).toBe('Chrome');
+    expect(stats[0]!.captureCount).toBe(5);
+    expect(stats[1]!.app).toBe('VS Code');
   });
 });
 
@@ -157,7 +160,7 @@ describe('Vault — Awareness Suggestions', () => {
 
     markSuggestionDismissed(s.id);
     const recent = getRecentSuggestions(1);
-    expect(recent[0].dismissed).toBe(1);
+    expect(recent[0]!.dismissed).toBe(1);
 
     const s2 = createSuggestion({ type: 'stuck', title: 'Stuck', body: 'You seem stuck' });
     markSuggestionActedOn(s2.id);

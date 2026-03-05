@@ -30,7 +30,7 @@ export async function runDoctor(): Promise<void> {
 
   const bunVersion = Bun.version;
   const [major] = bunVersion.split('.').map(Number);
-  if (major >= 1) {
+  if (major! >= 1) {
     results.push({ name: 'Bun Runtime', status: 'ok', message: `v${bunVersion}` });
   } else {
     results.push({ name: 'Bun Runtime', status: 'warn', message: `v${bunVersion} (>= 1.0.0 recommended)` });

@@ -10,6 +10,7 @@ type Commitment = {
   priority: string;
   status: string;
   assigned_to: string | null;
+  created_from: string | null;
   created_at: number;
   completed_at: number | null;
   result: string | null;
@@ -78,7 +79,7 @@ export function TaskList() {
           <TaskCard
             key={task.id}
             task={task}
-            onStatusChange={(status) => handleStatusChange(task.id, status)}
+            onStatusChange={(status) => handleStatusChange(task.id, status as "completed" | "failed")}
           />
         ))}
       </div>

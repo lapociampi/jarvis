@@ -48,7 +48,7 @@ describe('Vault — Workflows', () => {
 
     const tagged = vault.findWorkflows({ tag: 'auto' });
     expect(tagged.length).toBe(1);
-    expect(tagged[0].name).toBe('WF-3');
+    expect(tagged[0]!.name).toBe('WF-3');
   });
 
   test('updateWorkflow', () => {
@@ -93,8 +93,8 @@ describe('Vault — Versions', () => {
 
     const history = vault.getVersionHistory(wf.id);
     expect(history).toHaveLength(2);
-    expect(history[0].version).toBe(2); // newest first
-    expect(history[1].version).toBe(1);
+    expect(history[0]!.version).toBe(2); // newest first
+    expect(history[1]!.version).toBe(1);
 
     const v1 = vault.getVersion(wf.id, 1);
     expect(v1!.definition.nodes).toHaveLength(1);
@@ -143,8 +143,8 @@ describe('Vault — Executions', () => {
 
     const steps = vault.getStepResults(exec.id);
     expect(steps).toHaveLength(1);
-    expect(steps[0].status).toBe('completed');
-    expect(steps[0].output_data).toEqual({ response: 'ok' });
+    expect(steps[0]!.status).toBe('completed');
+    expect(steps[0]!.output_data).toEqual({ response: 'ok' });
   });
 
   test('findExecutions', () => {
@@ -197,9 +197,9 @@ describe('GraphExecutor — topologicalSort', () => {
 
     const levels = topologicalSort(def);
     expect(levels).toHaveLength(3);
-    expect(levels[0]).toEqual(['a']);
-    expect(levels[1]).toEqual(['b']);
-    expect(levels[2]).toEqual(['c']);
+    expect(levels[0]!).toEqual(['a']);
+    expect(levels[1]!).toEqual(['b']);
+    expect(levels[2]!).toEqual(['c']);
   });
 
   test('parallel branches', () => {
@@ -221,9 +221,9 @@ describe('GraphExecutor — topologicalSort', () => {
 
     const levels = topologicalSort(def);
     expect(levels).toHaveLength(3);
-    expect(levels[0]).toEqual(['trigger']);
-    expect(levels[1].sort()).toEqual(['left', 'right']);
-    expect(levels[2]).toEqual(['merge']);
+    expect(levels[0]!).toEqual(['trigger']);
+    expect(levels[1]!.sort()).toEqual(['left', 'right']);
+    expect(levels[2]!).toEqual(['merge']);
   });
 
   test('getOutgoingEdges with route filter', () => {

@@ -77,7 +77,7 @@ export function getWSLHostIP(): string {
     const resolv = readFileSync('/etc/resolv.conf', 'utf-8');
     const match = resolv.match(/nameserver\s+(\d+\.\d+\.\d+\.\d+)/);
     if (match) {
-      return match[1];
+      return match[1]!;
     }
   } catch {
     // ignore

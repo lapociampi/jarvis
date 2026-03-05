@@ -44,7 +44,7 @@ export class BehaviorAnalytics {
 
     // Compute focus metrics
     const contextSwitches = captures.filter((c, i) =>
-      i > 0 && c.app_name !== captures[i - 1].app_name
+      i > 0 && c.app_name !== captures[i - 1]!.app_name
     ).length;
 
     const totalActiveMinutes = Math.round((captures.length * 7) / 60); // ~7s per capture
@@ -59,7 +59,7 @@ export class BehaviorAnalytics {
     let longestStreak = 0;
     let currentStreak = 1;
     for (let i = 1; i < captures.length; i++) {
-      if (captures[i].app_name === captures[i - 1].app_name) {
+      if (captures[i]!.app_name === captures[i - 1]!.app_name) {
         currentStreak++;
       } else {
         longestStreak = Math.max(longestStreak, currentStreak);
@@ -90,7 +90,7 @@ export class BehaviorAnalytics {
     );
 
     return {
-      date: targetDate,
+      date: targetDate!,
       totalActiveMinutes,
       appBreakdown,
       sessionCount: daySessions.length,
@@ -204,7 +204,7 @@ export class BehaviorAnalytics {
       const activeMinutes = Math.round((captures.length * 7) / 60);
 
       const contextSwitches = captures.filter((c, i) =>
-        i > 0 && c.app_name !== captures[i - 1].app_name
+        i > 0 && c.app_name !== captures[i - 1]!.app_name
       ).length;
 
       const activeHours = Math.max(activeMinutes / 60, 0.1);
@@ -216,7 +216,7 @@ export class BehaviorAnalytics {
       const allSessions = getRecentSessions(100);
       const sessionCount = allSessions.filter(s => s.started_at >= dayStart && s.started_at <= dayEnd).length;
 
-      dailyBreakdown.push({ date: dateStr, activeMinutes, focusScore, contextSwitches, sessionCount });
+      dailyBreakdown.push({ date: dateStr!, activeMinutes, focusScore, contextSwitches, sessionCount });
       totalMinutes += activeMinutes;
       totalFocus += focusScore;
       totalSwitches += contextSwitches;
@@ -248,7 +248,7 @@ export class BehaviorAnalytics {
       const dayEnd = new Date(dateStr + 'T23:59:59.999').getTime();
       const captures = getCapturesInRange(dayStart, dayEnd);
       const mins = Math.round((captures.length * 7) / 60);
-      const switches = captures.filter((c, i) => i > 0 && c.app_name !== captures[i - 1].app_name).length;
+      const switches = captures.filter((c, i) => i > 0 && c.app_name !== captures[i - 1]!.app_name).length;
       const hrs = Math.max(mins / 60, 0.1);
       const focus = captures.length > 0
         ? Math.max(0, Math.min(100, Math.round(100 * Math.exp(-(switches / hrs) / 15))))
@@ -284,8 +284,8 @@ export class BehaviorAnalytics {
     );
 
     return {
-      weekStart: weekStartStr,
-      weekEnd: weekEndStr,
+      weekStart: weekStartStr!,
+      weekEnd: weekEndStr!,
       totalActiveMinutes: totalMinutes,
       avgDailyMinutes,
       avgFocusScore,
@@ -329,7 +329,7 @@ export class BehaviorAnalytics {
     // Focus comparison
     const computeFocus = (captures: Array<{ app_name: string | null }>) => {
       if (captures.length === 0) return 0;
-      const switches = captures.filter((c, i) => i > 0 && c.app_name !== captures[i - 1].app_name).length;
+      const switches = captures.filter((c, i) => i > 0 && c.app_name !== captures[i - 1]!.app_name).length;
       const hours = Math.max((captures.length * 7) / 3600, 0.1);
       return Math.max(0, Math.min(100, Math.round(100 * Math.exp(-(switches / hours) / 15))));
     };
@@ -352,7 +352,7 @@ export class BehaviorAnalytics {
     // Top app identification
     const currentApps = getAppUsageStats(currentStart, now);
     if (currentApps.length > 0) {
-      const topApp = currentApps[0];
+      const topApp = currentApps[0]!;
       insights.push({
         id: generateId(),
         type: 'top_app',

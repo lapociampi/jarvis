@@ -89,7 +89,7 @@ export class TelegramAdapter implements ChannelAdapter {
     // Verify bot token by calling getMe
     try {
       const response = await fetch(`${this.baseUrl}/getMe`);
-      const data = await response.json();
+      const data = await response.json() as any;
 
       if (!data.ok) {
         throw new Error(`Invalid bot token: ${data.description}`);
@@ -126,7 +126,7 @@ export class TelegramAdapter implements ChannelAdapter {
           }),
         });
 
-        const data = await response.json();
+        const data = await response.json() as any;
 
         if (!data.ok) {
           // Retry without Markdown if parsing failed
@@ -186,14 +186,14 @@ export class TelegramAdapter implements ChannelAdapter {
       }),
     });
 
-    const data: TelegramGetUpdatesResponse = await response.json();
+    const data: TelegramGetUpdatesResponse = await response.json() as TelegramGetUpdatesResponse;
 
     if (!data.ok) {
       throw new Error('Failed to get updates');
     }
 
     if (data.result.length > 0) {
-      this.offset = data.result[data.result.length - 1].update_id + 1;
+      this.offset = data.result[data.result.length - 1]!.update_id + 1;
     }
 
     return data.result;
@@ -279,7 +279,7 @@ export class TelegramAdapter implements ChannelAdapter {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ file_id: fileId }),
     });
-    const fileData = await fileResp.json();
+    const fileData = await fileResp.json() as any;
 
     if (!fileData.ok) {
       throw new Error(`Failed to get file info: ${fileData.description}`);

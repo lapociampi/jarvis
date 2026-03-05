@@ -104,7 +104,7 @@ export class CaptureEngine implements Observer {
       const cpuCount = os.cpus().length;
       const load = os.loadavg()[0];
       const loadThreshold = Math.max(cpuCount * 1.5, 8);
-      if (load > loadThreshold) return;
+      if (load! > loadThreshold) return;
 
       // Connect to sidecar with timeout
       if (!this.desktop.connected) {

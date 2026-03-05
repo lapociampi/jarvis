@@ -155,7 +155,7 @@ export class ObserverBridge {
   private mapEventType(rawType: string): ObserverTriggerType | null {
     // Direct match
     if (rawType in EVENT_TYPE_MAP) {
-      return EVENT_TYPE_MAP[rawType];
+      return EVENT_TYPE_MAP[rawType]!;
     }
 
     // Prefix match (e.g. "file_" -> file_change)

@@ -23,7 +23,7 @@ type RouteHandler = (req: Request) => Response | Promise<Response>;
 type MethodRoutes = { [method: string]: RouteHandler };
 
 export class WebSocketServer {
-  private server: Server | null = null;
+  private server: Server<any> | null = null;
   private clients: Set<ServerWebSocket<unknown>> = new Set();
   private handler: WSClientHandler | null = null;
   private port: number;
@@ -323,8 +323,8 @@ function matchRoute(pattern: string, pathname: string): Record<string, string> |
   const params: Record<string, string> = {};
 
   for (let i = 0; i < patternParts.length; i++) {
-    if (patternParts[i].startsWith(':')) {
-      params[patternParts[i].slice(1)] = pathParts[i];
+    if (patternParts[i]!.startsWith(':')) {
+      params[patternParts[i]!.slice(1)] = pathParts[i]!;
     } else if (patternParts[i] !== pathParts[i]) {
       return null;
     }

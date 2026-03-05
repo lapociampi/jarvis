@@ -76,7 +76,7 @@ export default function CalendarPage({ taskEvents, contentEvents }: Props) {
       (e) => e.timestamp > lastTaskProcessed.current
     );
     if (newEvents.length === 0) return;
-    lastTaskProcessed.current = newEvents[newEvents.length - 1].timestamp;
+    lastTaskProcessed.current = newEvents[newEvents.length - 1]!.timestamp;
     fetchEvents(weekStart);
   }, [taskEvents, weekStart, fetchEvents]);
 
@@ -87,7 +87,7 @@ export default function CalendarPage({ taskEvents, contentEvents }: Props) {
       (e) => e.timestamp > lastContentProcessed.current
     );
     if (newEvents.length === 0) return;
-    lastContentProcessed.current = newEvents[newEvents.length - 1].timestamp;
+    lastContentProcessed.current = newEvents[newEvents.length - 1]!.timestamp;
     fetchEvents(weekStart);
   }, [contentEvents, weekStart, fetchEvents]);
 
