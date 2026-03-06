@@ -1,0 +1,7 @@
+# TS sidecar
+ts/dist/
+ts/node_modules/
+
+# Go sidecar
+go/sidecar
+go/sidecar.exe
